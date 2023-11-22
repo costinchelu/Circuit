@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div class="row">
+        <div class="col border m-3 p-2">
+            <div><label>Imagine primară: [[${product.mainImage}]]</label></div>
+            <div class="m-2">
+                <img alt="Previzualizare imagine primară" class="img-fluid"
+                     th:src="@{${product.mainImagePath}}"/>
+            </div>
+        </div>
+
+        <th:block th:each="productImage, status : ${product.images}">
+            <div class="col border m-3 p-2">
+                <div>
+                    <label>Imagine suplimentară #[[${status.index + 1}]]: [[${productImage.name}]]</label>
+                </div>
+                <div class="m-2">
+                    <img th:alt="'Previzualizare imagine suplimentară #' + ${status.index + 1}" class="img-fluid"
+                         th:src="@{${productImage.imagePath}}"/>
+                </div>
+            </div>
+        </th:block>
+    </div>
+</div>
+</body>
+</html>

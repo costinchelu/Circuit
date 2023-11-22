@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: page_header(${pageTitle}, 'none')"></head>
+<body>
+<div class="container-fluid">
+    <div th:replace="navigation :: header_menu"></div>
+
+    <div>&nbsp;</div>
+
+    <div class="text-center">
+        <h2>Înregistrare client</h2>
+        <h4>Te-ai înregistrat cu succes, iar un email de verificare a fost trimis pe adresa ta de email.</h4>
+        <p>Te rog să îti deschizi email-ul pentru accesarea link-ului de verificare.</p>
+        <p><a th:href="@{/login}">Autentificare client</a></p>
+    </div>
+
+    <div>&nbsp;</div>
+
+    <div th:replace="navigation :: footer_menu"></div>
+</div>
+</body>
+</html>

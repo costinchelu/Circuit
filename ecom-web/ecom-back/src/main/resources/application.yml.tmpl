@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    username: ecomuser
+    url: jdbc:mysql://localhost:3306/ecomdb
+    password: '12345'
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: 'true'
+    hibernate:
+      ddl-auto: update
+    show-sql: 'false'
+  thymeleaf:
+    cache: 'false'
+  devtools:
+    restart:
+      additional-paths: ecom-web/**
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+server:
+  servlet:
+    context-path: /admin
+  port: '8080'

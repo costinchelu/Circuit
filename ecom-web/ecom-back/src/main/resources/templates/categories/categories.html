@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: page_header('Modul administrare - Gestiune categorii', 'none')"></head>
+
+<body>
+<div class="container-fluid">
+
+    <div th:replace="navigation :: menuBar"></div>
+
+    <div>
+        <h2>Categorii</h2>
+    </div>
+    <br>
+    <br>
+    <div>
+        <a th:href="@{/categories/new}" class="fas fa-folder-plus fa-2x icon-dodger-blue mr-5 ml-3"></a>
+        <a th:href="@{/categories/export/csv}" class="fas fa-file-csv fa-2x icon-dark mr-4"></a>
+    </div>
+    <br>
+
+    <div th:replace="fragments :: search_form_and_message" ></div>
+
+    <!--    Categories table-->
+    <div class="full-details">
+        <table class="table table-bordered table-striped table-hover table-responsive-xl">
+            <thead class="thead-dark">
+            <tr>
+                <th>ID</th>
+                <th>Imagine categorie</th>
+                <th th:replace="fragments :: column_link('name', 'Nume categorie', 'none')"></th>
+                <th class="hideable-column" >Alias</th>
+                <th>Activare</th>
+                <th>Editare/Ștergere</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="cat : ${listCategories}">
+
+                <td class="text-center align-middle">[[${cat.id}]]</td>
+                <td class="text-center align-middle">
+                    <img th:src="@{${cat.imagePath}}" style="width: 100px" class="img-fluid" >
+                </td>
+                <td>[[${cat.name}]]</td>
+                <td class="hideable-column" >[[${cat.alias}]]</td>
+
+                <td class="text-center align-middle">
+                    <div th:replace="fragments :: status(${cat.enabled}, 'categorie', '/categories/' + ${cat.id})" ></div>
+                </td>
+
+                <td class="text-center align-middle">
+                    <div th:replace="fragments :: edit('categorie', '/categories/edit/' + ${cat.id})" ></div>
+                    &nbsp;&nbsp;
+                    <div th:replace="fragments :: delete('categorie', ${cat.id}, '/categories/delete/' + ${cat.id}, ${!cat.hasChildren})" ></div>
+                </td>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="less-details">
+        <div th:each="cat : ${listCategories}" class="row m-1">
+            <div class="col-4">
+                <img th:src="@{${cat.imagePath}}" style="width: 100px" class="img-fluid"/>
+            </div>
+            <div class="col-8">
+                <div>[[${cat.name}]]</div>
+                <div class="mt-2">
+                    <div th:replace="fragments :: status(${cat.enabled}, 'categorie', '/categories/' + ${cat.id})" ></div>
+                    &nbsp;
+                    <div th:replace="fragments :: edit('categorie', '/categories/edit/' + ${cat.id})" ></div>
+                    &nbsp;
+                    <div th:replace="fragments :: delete('categorie', ${cat.id}, '/categories/delete/' + ${cat.id}, ${!cat.hasChildren})" ></div>
+                </div>
+            </div>
+            <div>&nbsp;</div>
+        </div>
+    </div>
+
+    <div  th:if="${keyword != null}" class="text-center" >
+        <span>Rezultatele căutării nu oferă listarea în ordine ierarhică</span>
+        <div th:replace="fragments :: pagination('categorii')" ></div>
+    </div>
+
+    <th:block th:unless="${keyword != null}" >
+        <div th:replace="fragments :: pagination('categorii')" ></div>
+    </th:block>
+
+    <div th:replace="modal_fragments :: confirm_modal"></div>
+
+    <div th:replace="fragments :: footer"></div>
+
+
+</div>
+<script th:src="@{/js/commonList.js}"></script>
+<script type="text/javascript">
+
+    moduleURL = "[[@{/categories}]]";
+
+    $(document).ready(function() {
+        $(".link-delete").on("click", function(e) {
+            e.preventDefault();
+            showDeleteConfirmModal($(this), 'categorie');
+        });
+    });
+</script>
+</body>
+</html>

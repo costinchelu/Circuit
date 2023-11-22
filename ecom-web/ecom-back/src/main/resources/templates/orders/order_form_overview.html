@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">ID comandă:</label>
+        <div class="col-sm-10">
+            <input type="text" readonly class="form-control" th:value="${order.id}">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Client:</label>
+        <div class="col-sm-10">
+            <input type="text" readonly class="form-control" th:value="${order.customer.fullName}">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Cost achiziție:</label>
+        <div class="col-sm-10">
+            <input type="text" readonly th:field="*{productCost}" required class="form-control" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Subtotal:</label>
+        <div class="col-sm-10">
+            <input type="text" readonly th:field="*{subtotal}" required class="form-control" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Cost livrare:</label>
+        <div class="col-sm-10">
+            <input type="text" readonly th:field="*{shippingCost}" required class="form-control" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Taxe:</label>
+        <div class="col-sm-10">
+            <input type="text" th:field="*{tax}" required class="form-control" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Total:</label>
+        <div class="col-sm-10">
+            <input type="text" readonly th:field="*{total}" required class="form-control" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Metodă de plată</label>
+        <div class="col-sm-10">
+            <select th:field="*{paymentMethod}" class="form-control" required style="max-width: 150px">
+                <option th:each="pm : ${T(ro.ase.costin.ecomcommon.data.PaymentMethod).values()}"
+                        th:value="${pm}" th:text="${pm}" />
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Stare:</label>
+        <div class="col-sm-10">
+            <select th:field="*{status}" class="form-control" required style="max-width: 150px">
+                <option th:each="os : ${T(ro.ase.costin.ecomcommon.data.OrderStatus).values()}"
+                        th:value="${os}" th:text="${os}" />
+            </select>
+        </div>
+    </div>
+</div>

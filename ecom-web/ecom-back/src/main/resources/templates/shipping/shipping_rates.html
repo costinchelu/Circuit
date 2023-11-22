@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: page_header('Modul administrare - Gestiune tarife de livrare', 'none')"></head>
+<body>
+<div class="container-fluid">
+    <div th:replace="navigation :: menuBar"></div>
+    <div>
+        <h2>Tarife de livrare</h2>
+
+        <a th:href="@{/shipping_rates/new}" class="fas fa-folder-plus fa-2x icon-dark mr-2"></a>
+    </div>
+
+    <div th:replace="fragments :: search_form_and_message"></div>
+
+    <div class="full-details">
+        <table class="table table-bordered table-striped table-hover table-responsive-xl">
+            <thead class="thead-dark">
+            <tr>
+                <th th:replace="fragments :: column_link('id', 'ID', 'none')"></th>
+                <th th:replace="fragments :: column_link('country', 'Țara', 'none')"></th>
+                <th th:replace="fragments :: column_link('state', 'Regiunea', 'none')"></th>
+                <th th:replace="fragments :: column_link('rate', 'Tarif', 'none')"></th>
+                <th th:replace="fragments :: column_link('days', 'Zile livrare', 'none')"></th>
+                <th th:replace="fragments :: column_link('codSupported', 'Plata la livrare', 'none')"></th>
+                <th>Editare/Ștergere</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="rate : ${shippingRates}">
+                <td class="text-center align-middle">[[${rate.id}]]</td>
+                <td>[[${rate.country.name}]]</td>
+                <td>[[${rate.state}]]</td>
+                <td>[[${rate.rate}]]</td>
+                <td>[[${rate.days}]]</td>
+                <td class="text-center align-middle">
+                    <div th:replace="shipping/shipping_rates_fragment :: cod_support"></div>
+                </td>
+                <td  class="text-center align-middle">
+                    <div th:replace="fragments :: edit('tarif de livrare', '/shipping_rates/edit/' + ${rate.id})"></div>
+                    &nbsp;
+                    <div th:replace="fragments :: delete('tarif de livrare', ${rate.id}, '/shipping_rates/delete/' + ${rate.id}, true)"></div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="less-details">
+        <div th:each="rate : ${shippingRates}" class="row m-1">
+            <div class="col-4">
+                <span><b>[[${rate.country.name}]]</b></span>
+                <br/>
+                <span>[[${rate.state}]]</span>
+            </div>
+            <div class="col-8">
+                <div class="text-center align-middle">
+                    <div th:replace="shipping/shipping_rates_fragment :: cod_support"></div>
+                    &nbsp;
+                    <div th:replace="fragments :: edit('tarif de livrare', '/shipping_rates/edit/' + ${rate.id})"></div>
+                    &nbsp;
+                    <div th:replace="fragments :: delete('tarif de livrare', ${rate.id}, '/shipping_rates/delete/' + ${rate.id}, true)"></div>
+                </div>
+            </div>
+            <div>&nbsp;</div>
+        </div>
+    </div>
+
+    <div th:replace="fragments :: pagination('tarife de livrare')"></div>
+    <div th:replace="modal_fragments :: confirm_modal"></div>
+    <div th:replace="fragments :: footer"></div>
+
+</div>
+
+<script th:src="@{/js/commonList.js}"></script>
+<script type="text/javascript">
+
+    moduleURL = "[[@{/shipping_rates}]]";
+
+    $(document).ready(function() {
+        $(".link-delete").on("click", function(e) {
+            e.preventDefault();
+            showDeleteConfirmModal($(this), 'tarif de livrare');
+        });
+    });
+
+</script>
+</body>
+</html>

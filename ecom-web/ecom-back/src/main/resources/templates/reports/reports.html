@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: page_header('Raportare vânzări', 'none')"></head>
+<body>
+<div class="container-fluid">
+    <div th:replace="navigation :: menuBar"></div>
+    <div>
+        <h2>Raportare vânzări</h2>
+    </div>
+
+    <div>
+        <ul class="nav nav-tabs" id="reportTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#date" role="tab">Vânzări pe perioade</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#category" role="tab">Vânzări pe categorii</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#product" role="tab">Vânzări pe produse</a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane active p-3" id="date" role="tabpanel">
+                <div th:replace="reports/sales_report_fragment::content('_date')"></div>
+            </div>
+            <div class="tab-pane p-3" id="category" role="tabpanel">
+                <div th:replace="reports/sales_report_fragment::content('_category')"></div>
+            </div>
+            <div class="tab-pane p-3" id="product" role="tabpanel">
+                <div th:replace="reports/sales_report_fragment::content('_product')"></div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragments :: footer"></div>
+<!--TODO  changing report should update the chart canvas  -->
+</div>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+
+    contextPath = "[[@{/}]]";
+
+    currencySymbol = "[[${CURRENCY_SYMBOL}]]";
+    decimalDigits = "[[${DECIMAL_DIGITS}]]";
+    decimalPointType = "[[${DECIMAL_POINT_TYPE == 'COMMA' ? ',' : '.'}]]";
+    currencySymbolPosition = "[[${CURRENCY_SYMBOL_POSITION}]]";
+    thousandsPointType = "[[${THOUSANDS_POINT_TYPE}]]";
+
+    prefixCurrencySymbol = currencySymbolPosition === 'Before price' ? currencySymbol : '';
+    suffixCurrencySymbol = currencySymbolPosition === 'After price' ? currencySymbol : '';
+
+    $(document).ready(function() {
+        loadThousandsPointTypeSettings();
+        google.charts.load('current', {'packages': ['corechart', 'table']});
+        google.charts.setOnLoadCallback(loadSalesReportByDate);
+    });
+
+
+    function loadThousandsPointTypeSettings() {
+        if (thousandsPointType === 'COMMA') {
+            thousandsPointType = ','
+        } else if (thousandsPointType === 'POINT') {
+            thousandsPointType = '.'
+        } else if (thousandsPointType === 'WHITESPACE') {
+            thousandsPointType = ' '
+        } else {
+            thousandsPointType = ''
+        }
+    }
+
+</script>
+<script type="text/javascript" th:src="@{/js/jquery.number.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/salesReportCommon.js}"></script>
+<script type="text/javascript" th:src="@{/js/salesReportByDate.js}"></script>
+<script type="text/javascript" th:src="@{/js/salesReportByCategory.js}"></script>
+<script type="text/javascript" th:src="@{/js/salesReportByProduct.js}"></script>
+</body>
+</html>

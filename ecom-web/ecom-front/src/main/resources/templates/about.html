@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: page_header('Notificări', 'none')"></head>
+<body>
+<div class="container-fluid">
+
+    <div th:replace="navigation :: header_menu"></div>
+    <br>
+
+    <div>
+        <img src="https://bdsa.ase.ro/" th:src="@{/images/logo_ase.png}" alt="Logo ASE" height="150"
+             class="rounded mx-auto d-block"/>
+        <br>
+        <h2 class="font-weight-normal text-xl-center">Academia de Studii Economice</h2>
+        <h2 class="font-weight-normal text-xl-center">Facultatea de Cibernetică, Statistică și Informatică
+            Economică</h2>
+        <h2 class="font-weight-normal text-xl-center">Master "Baze de date - suport pentru afaceri"</h2>
+        <p class="font-weight-normal text-xl-center">2022</p>
+        <br>
+        <h2 class="text-center font-weight-bold m-4" style="color: #0d6efd">PROIECTAREA ȘI DEZVOLTAREA UNEI APLICAȚII DE
+            COMERȚ ELECTRONIC EXEMPLIFICATĂ PRINTR-UN MAGAZIN ONLINE DE COMPONENTE ȘI ECHIPAMENTE ELECTRONICE</h2>
+        <br>
+
+    </div>
+    <br>
+</div>
+
+<div th:replace="navigation :: footer_menu"></div>
+</body>
+</html>

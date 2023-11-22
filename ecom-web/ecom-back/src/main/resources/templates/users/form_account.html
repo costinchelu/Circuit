@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: page_header('Detalii cont', 'none')"></head>
+
+<body>
+<div class="container-fluid">
+
+    <div th:replace="navigation :: menuBar" ></div>
+
+    <form th:action="@{/account/update}"
+          method="post"
+          th:object="${user}"
+          style="max-width: 900px; margin: 0 auto"
+          enctype="multipart/form-data">
+
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="text-center">
+            <h2>Detalii cont > [[${pageTitle}]]</h2>
+        </div>
+
+        <div th:if="${message != null}" class="alert alert-success text-center" >
+            [[${message}]]
+        </div>
+
+        <div class="border border-secondary rounded p-3">
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">E-mail:</label>
+                <div class="col-sm-8">
+                    <input type="email"
+                           placeholder="Introduceți adresa de email"
+                           class="form-control"
+                           th:field="*{email}"
+                           readonly />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Prenume:</label>
+                <div class="col-sm-8">
+                    <input type="text"
+                           class="form-control"
+                           th:field="*{firstName}"
+                           placeholder="Introduceți prenumele"
+                           required minlength="1"
+                           maxlength="45"/>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Nume:</label>
+                <div class="col-sm-8">
+                    <input type="text"
+                           class="form-control"
+                           th:field="*{lastName}"
+                           placeholder="Introduceți numele de familie"
+                           required minlength="1"
+                           maxlength="45"/>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Parolă:</label>
+                <div class="col-sm-8">
+                    <input type="password"
+                           class="form-control"
+                           th:field="*{password}"
+                           minlength="4" maxlength="20"
+                           placeholder="Introduceți parola (câmp gol pentru a păstra aceeași parolă)"
+                           oninput="checkPasswordMatch(document.getElementById('confirmPassword'))" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Confirmă parola:</label>
+                <div class="col-sm-8">
+                    <input type="password"
+                           class="form-control"
+                           minlength="4" maxlength="20"
+                           placeholder="Confirmați parola (câmp gol pentru a păstra aceeași parolă)"
+                           id="confirmPassword"
+                           oninput="checkPasswordMatch(this)" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Autorizări (roluri):</label>
+                <div class="col-sm-8">
+                    <span> <b>[[${user.getRoleNames()}]]</b> </span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Fotografie:</label>
+                <div class="col-sm-8">
+                    <input type="hidden" th:field="*{photo}" />
+                    <input type="file"
+                           class="mb-2"
+                           id="fileImage"
+                           name="image"
+                           accept="image/png, image/jpeg, image/webp" />
+                    <img id="thumbnail"
+                         class="img-fluid"
+                         alt="Previzualizare fotografie"
+                         th:src="@{${user.getPhotosImagePath()}}" />
+                </div>
+            </div>
+
+            <div class="text-center">
+                <input type="submit" value="Salvează" class="btn btn-primary m-3"/>
+                <input type="button" value="Anulează" class="btn btn-secondary" id="buttonCancel"/>
+            </div>
+        </div>
+    </form>
+
+    <div th:replace="fragments :: footer" ></div>
+
+</div>
+<script type="text/javascript">
+
+    moduleURL = "[[@{/}]]";
+
+    function checkPasswordMatch(confirmPassword) {
+        if (confirmPassword.value !== $("#password").val()) {
+            confirmPassword.setCustomValidity("Parolele nu se potrivesc!");
+        } else {
+            confirmPassword.setCustomValidity("");
+        }
+    }
+
+</script>
+<script th:src="@{/js/commonForm.js}" ></script>
+</body>
+</html>

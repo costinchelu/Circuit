@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: page_header('Circuit Store', 'none')"></head>
+<body>
+<div class="container-fluid">
+
+    <div th:replace="navigation :: header_menu"></div>
+
+    <div th:replace="navigation :: search_nav"></div>
+
+    <div class="text-center border border-secondary rounded m-3 p-3">
+        <h2>Comanda a fost plasată!</h2>
+        <h4>Ți-am trimis un email de confirmare.</h4>
+        <h4>Te rog să verifici detaliile comenzii în email-ul tău.</h4>
+    </div>
+
+
+    <div th:replace="navigation :: footer_menu"></div>
+</div>
+</body>
+</html>

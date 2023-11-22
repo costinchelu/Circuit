@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head th:replace="fragments :: page_header('Modul administrare - Gestiune produse', 'none')"></head>
+
+<body>
+<div class="container-fluid">
+    <div th:replace="navigation :: menuBar"></div>
+
+    <div>
+        <h2>Produse</h2>
+    </div>
+    <br>
+    <br>
+    <div>
+        <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+        <a th:href="@{/products/new}" class="fas fa-folder-plus fa-2x icon-dodger-blue mr-5 ml-3"></a>
+        <a th:href="@{/products/export/csv}" class="fas fa-file-csv fa-2x icon-dark mr-4" role="button" ></a>
+        <a th:href="@{/products/export/pdf}" class="fas fa-file-pdf fa-2x icon-dark mr-4" role="button" ></a>
+        </th:block>
+    </div>
+    <br>
+
+    <div>
+        <form th:action="@{/products/page/1}" class="form-inline m-3" id="searchForm">
+            <input type="hidden" name="sortField" th:value="${sortField}" />
+            <input type="hidden" name="sortDir" th:value="${sortDir}" />
+
+            Categorie:&nbsp;
+            <select class="form-control" name="categoryId" id="dropdownCategory">
+                <option value="0">Toate categoriile</option>
+
+                <th:block th:each="cat : ${listCategories}">
+                    <option th:value="${cat.id}" th:selected="(${categoryId} == ${cat.id})">[[${cat.name}]]</option>
+                </th:block>
+            </select>
+
+            &nbsp;Filtrare:&nbsp;
+            <input type="search" name="keyword" th:value="${keyword}" class="form-control" required/>
+            &nbsp;&nbsp;
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-search"></i>
+            </button>
+            &nbsp;&nbsp;
+            <button type="button" class="btn btn-danger" onclick="clearFilter()">
+                <i class="fas fa-eraser"></i>
+            </button>
+        </form>
+
+        <div th:if="${message != null}" class="alert alert-success text-center">
+            [[${message}]]
+        </div>
+    </div>
+
+    <div class="full-details">
+        <table class="table table-bordered table-striped table-hover table-responsive-xl">
+            <thead class="thead-dark">
+            <tr>
+                <th class="hideable-column" >
+                    <th th:replace="fragments :: column_link('id', 'ID', 'tag')"></th>
+                </th>
+
+                <th>Imagine</th>
+
+                <th th:replace="fragments :: column_link('name', 'Denumire', 'none')"></th>
+
+                <th class="hideable-column" >
+                    <th th:replace="fragments :: column_link('brand', 'Marcă', 'tag')"></th>
+                </th>
+
+                <th class="hideable-column" >
+                    <th th:replace="fragments :: column_link('category', 'Categorie', 'tag')"></th>
+                </th>
+
+                <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+                    <th>Activat</th>
+                </th:block>
+
+                <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor', 'Sales')">
+                    <th>Editare/Ștergere</th>
+                </th:block>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="product : ${listProducts}">
+
+                <td class="text-center align-middle hideable-column">[[${product.id}]]</td>
+
+                <td class="text-center align-middle">
+                    <img th:src="@{${product.mainImagePath}}" style="width: 120px" class="img-fluid"  alt="Imaginea produsului"/>
+                </td>
+
+                <td th:title="${product.name}">
+                    <a class="link-detail"
+                       th:href="@{'/products/detail/' + ${product.id}}"
+                       title="Vizualizare detalii produs"
+                    >[[${product.name}]]</a>
+                </td>
+
+                <td class="hideable-column" >[[${product.brand.name}]]</td>
+
+                <td class="hideable-column" >[[${product.category.name}]]</td>
+
+                <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+                    <td class="text-center align-middle">
+                        <div th:replace="fragments :: status(${product.enabled}, 'produs', '/products/' + ${product.id})"></div>
+                    </td>
+                </th:block>
+
+                <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor', 'Sales')">
+                <td class="text-center align-middle">
+                    <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor', 'Sales')">
+                    <a class="fas fa-file-alt fa-2x icon-dodger-blue link-detail"
+                       th:href="@{'/products/detail/' + ${product.id}}"
+                       title="Vizualizare detalii produs">
+                    </a>
+                    </th:block>
+
+                    <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor', 'Sales')">
+                        &nbsp;
+                        <div th:replace="fragments :: edit('produs', '/products/edit/' + ${product.id})"></div>
+                    </th:block>
+
+                    <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+                        &nbsp;
+                        <div th:replace="fragments :: delete('produs', ${product.id}, '/products/delete/' + ${product.id}, true)"></div>
+                    </th:block>
+                </td>
+                </th:block>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="less-details">
+        <div th:each="product : ${listProducts}" class="row m-1">
+
+            <div class="col-4">
+                <img th:src="@{${product.mainImagePath}}" style="width: 80px" class="img-fluid" />
+            </div>
+
+            <div class="col-8">
+                <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor', 'Sales', 'Shipper')">
+                <div>
+                    <a class="link-detail" th:href="@{'/products/detail/' + ${product.id}}">[[${product.shortName}]]</a>
+                </div>
+                </th:block>
+
+                <div class="mt-2">
+                    <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor', 'Sales')">
+                    <a class="fas fa-file-alt fa-2x icon-dodger-blue link-detail"
+                       th:href="@{'/products/detail/' + ${product.id}}">
+                    </a>
+                    </th:block>
+
+                    <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor', 'Sales')">
+                        &nbsp;
+                        <div th:replace="fragments :: edit('produs', '/products/edit/' + ${product.id})"></div>
+                    </th:block>
+
+                    <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+                        &nbsp;
+                        <div th:replace="fragments :: delete('produs', ${product.id}, '/products/delete/' + ${product.id}, true)"></div>
+                    </th:block>
+                </div>
+            </div>
+            <div>&nbsp;</div>
+        </div>
+    </div>
+
+    <div th:replace="modal_fragments :: confirm_modal"></div>
+
+    <div class="modal fade" id="detailModal">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragments :: pagination('produse')"></div>
+
+    <div th:replace="fragments :: footer"></div>
+
+</div>
+<script th:src="@{/js/commonList.js}"></script>
+<script type="text/javascript">
+
+    moduleURL = "[[@{/products}]]";
+
+    $(document).ready(function () {
+        $(".link-delete").on("click", function (e) {
+            e.preventDefault();
+            showDeleteConfirmModal($(this), 'produs');
+        });
+
+        $(".link-detail").on("click", function(e) {
+            e.preventDefault();
+            linkDetailURL = $(this).attr("href");
+            $("#detailModal").modal("show").find(".modal-content").load(linkDetailURL);
+        });
+
+        $("#dropdownCategory").on("change", function() {
+            $("#searchForm").submit();
+        });
+    });
+</script>
+</body>
+</html>

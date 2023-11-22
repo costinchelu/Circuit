@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: page_header(${pageTitle}, 'none')"></head>
+
+<body>
+<div class="container-fluid">
+    <div th:replace="navigation :: menuBar"></div>
+    <div>
+        <h2>Gestiune mărci | [[${pageTitle}]]</h2>
+    </div>
+
+    <form th:action="@{/brands/save}"
+          method="post"
+          style="max-width: 500px; margin: 0 auto"
+          enctype="multipart/form-data"
+          onsubmit="return checkUnique(this)"
+          th:object="${brand}">
+
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="border border-secondary rounded p-3">
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Nume marcă:</label>
+                <div class="col-sm-8">
+                    <input type="text"
+                           class="form-control"
+                           th:field="*{name}"
+                           placeholder="Introduceți numele mărcii"
+                           required minlength="3" maxlength="45"  />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Logo marcă:</label>
+                <div class="col-sm-8">
+                    <input type="hidden" th:field="*{logo}" />
+                    <input type="file" id="fileImage" name="fileImage" accept="image/png, image/jpeg, image/webp"
+                           class="mb-2"
+                           th:required="${brand.id == null}" />
+
+                    <div class="mt-2">
+                        <img id="thumbnail" alt="Previzualizare logo" th:src="@{${brand.logoPath}}"
+                             class="img-fluid" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Selectează una sau mai multe categorii:</label>
+                <div class="col-sm-8">
+                    <select class="form-control"
+                            th:field="*{categories}"
+                            multiple required
+                            style="resize: vertical; height: 200px">
+                        <th:block th:each="cat : ${listCategories}">
+                            <option th:value="${cat.id}">[[${cat.name}]]</option>
+                        </th:block>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Alege categoriile:</label>
+                <div class="col-sm-8">
+                    <div id="chosenCategories">
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <input type="submit" value="Salvează" class="btn btn-primary m-3" />
+                <input type="button" value="Anulează" class="btn btn-secondary" id="buttonCancel" />
+            </div>
+        </div>
+    </form>
+
+    <div th:replace="modal_fragments :: modal_dialog"></div>
+
+    <div th:replace="fragments :: footer"></div>
+
+</div>
+<script type="text/javascript">
+
+    moduleURL = "[[@{/brands}]]";
+    MAX_FILE_SIZE = 1_048_576;
+
+    $(document).ready(function() {
+        dropdownCategories = $("#categories");
+        divChosenCategories = $("#chosenCategories");
+
+        dropdownCategories.change(function() {
+            divChosenCategories.empty();
+            showChosenCategories();
+        });
+        showChosenCategories();
+    });
+
+    function showChosenCategories() {
+        dropdownCategories.children("option:selected").each(function() {
+            selectedCategory = $(this);
+            catId = selectedCategory.val();
+            catName = selectedCategory.text().replace(/-/g, "");
+
+            divChosenCategories.append("<span class='badge badge-secondary m-1'>" + catName + "</span>");
+        });
+    }
+
+    function checkUnique(form) {
+        let brandId = $("#id").val();
+        let brandName = $("#name").val();
+        let csrfValue = $("input[name='_csrf']").val();
+        let url = "[[@{/brands/check_unique}]]";
+        let params = {id: brandId, name: brandName, _csrf: csrfValue};
+
+        $.post(url, params, function(response) {
+            if (response === "OK") {
+                form.submit();
+            } else if (response === "Duplicate") {
+                showWarningModal("Există o marcă cu același nume: " + brandName);
+            } else {
+                showErrorModal("Răspuns eronat primit de la server");
+            }
+
+        }).fail(function() {
+            showErrorModal("Nu s-a putut efectua conexiunea cu serverul");
+        });
+
+        return false;
+    }
+
+</script>
+<script th:src="@{/js/commonForm.js}"></script>
+</body>
+</html>

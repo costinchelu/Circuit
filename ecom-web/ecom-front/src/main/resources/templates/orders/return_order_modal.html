@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="content" class="modal fade" id="returnOrderModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="returnOrderModalTitle">Retur comandă</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <form onsubmit="return submitReturnOrderForm();">
+        <div class="modal-body">
+          <div id="divReason">
+            <div>Motiv:</div>
+            <div>
+              <input type="radio" name="returnReason" value="Am cumpărat produsele greșite" required />
+              Am cumpărat produsele greșite
+            </div>
+            <div>
+              <input type="radio" name="returnReason" value="Am primit alte produse" />
+              Am primit alte produse
+            </div>
+            <div>
+              <input type="radio" name="returnReason" value="Produsele a fost deteriorat/defect" />
+              Produsele a fost deteriorat/defect
+            </div>
+            <div>
+              <input type="radio" name="returnReason" value="Produsele au ajuns prea târziu" />
+              Produsele au ajuns prea târziu
+            </div>
+            <div class="m-1">
+						<textarea class="form-control" id="returnNote" rows="3" maxlength="120"
+                                  placeholder="Informații suplimentare">
+                        </textarea>
+            </div>
+          </div>
+          <div id="divMessage" class="text-center"></div>
+        </div>
+
+
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success" id="firstButton">Trimite cererea</button>
+          <button type="button" class="btn btn-danger" id="secondButton" data-dismiss="modal">Anulează</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,3 @@
+create a paypal developers account (find info on youtube)
+
+use some fake (generated) cards to test Paypal payments

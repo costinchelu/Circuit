@@ -1,0 +1,39 @@
+package ro.ase.costin.ecomback.order;
+
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import ro.ase.costin.ecomcommon.data.OrderStatus;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+@Disabled("Integration tests")
+class OrderRestControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Test
+    @WithMockUser(username = "user1", password = "pass1", authorities = {"Shipper"})
+    void testUpdateOrderStatus() throws Exception {
+        int orderId = 9;
+        String status = OrderStatus.PROCESARE.name();
+//        String status = OrderStatus.PACKAGED.name();
+//        String status = OrderStatus.PICKED.name();
+//        String status = OrderStatus.SHIPPING.name();
+        String requestURL = "/orders_shipper/update/" + orderId + "/" + status;
+
+        mockMvc.perform(post(requestURL).with(csrf()))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(print());
+    }
+}

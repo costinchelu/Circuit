@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: page_header('Circuit Store', 'none')"></head>
+
+<body>
+<div class="container-fluid">
+
+    <div th:replace="navigation :: header_menu"></div>
+
+    <div th:replace="navigation :: search_nav"></div>
+
+    <br>
+    <div>
+        <h1>Categorii produse:</h1>
+    </div>
+    <br>
+
+    <div class="row text-center">
+        <div class="col" th:each="cat : ${listCategories}">
+            <div class="p-4" ><img th:src="@{${cat.imagePath}}" height="80" /></div>
+            <div>
+                <a th:href="@{'/c/' + ${cat.alias}}">[[${cat.name}]]</a>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="navigation :: footer_menu"></div>
+
+</div>
+</body>
+</html>

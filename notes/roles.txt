@@ -1,0 +1,25 @@
+Administrator = access
+                all areas
+
+Sales = access
+        product price,
+        customers,
+        shipping,
+        orders,
+        sales report
+
+Editor = access
+            categories,
+            brands,
+            products,
+            articles,
+            menus
+
+Shipper = access
+            order
+            status
+            view products,
+            orders
+
+Assistant = access
+               forum (reviews, questions)

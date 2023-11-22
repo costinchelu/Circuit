@@ -1,0 +1,7 @@
+### Index page for ecom-back
+GET http://localhost:8080/admin/
+
+### Index page for ecom-front
+GET http://localhost:80/site
+
+

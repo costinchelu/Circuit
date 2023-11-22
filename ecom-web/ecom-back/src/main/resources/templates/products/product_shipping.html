@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div class="form-group row">
+        Informații necesare calculării pretului de livrare.
+        <br>
+        Dimensiunile (L X l X Î) coletului pentru acest produs.
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Lungime (cm):</label>
+        <div class="col-sm-10">
+            <input type="number" min="0" step="0.01" placeholder="0" class="form-control" th:field="*{length}"/>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Lățime (cm):</label>
+        <div class="col-sm-10">
+            <input type="number" min="0" step="0.01" placeholder="0" class="form-control" th:field="*{width}"/>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Înălțime (cm):</label>
+        <div class="col-sm-10">
+            <input type="number" min="0" step="0.01" placeholder="0" class="form-control" th:field="*{height}"/>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Greutate (kg):</label>
+        <div class="col-sm-10">
+            <input type="number" min="0" step="0.01" placeholder="0" class="form-control" th:field="*{weight}"/>
+        </div>
+    </div>
+</div>
+</body>
+</html>

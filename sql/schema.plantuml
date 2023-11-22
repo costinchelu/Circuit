@@ -1,0 +1,226 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class addresses {
+   customer_id: int
+   country_id: int
+   first_name: varchar(45)
+   last_name: varchar(45)
+   phone_number: varchar(15)
+   address_line_1: varchar(64)
+   address_line_2: varchar(64)
+   city: varchar(45)
+   state: varchar(45)
+   postal_code: varchar(10)
+   default_address: bit(1)
+   id: int
+}
+class brands {
+   name: varchar(45)
+   logo: varchar(128)
+   id: int
+}
+class brands_categories {
+   brand_id: int
+   category_id: int
+}
+class cart_items {
+   customer_id: int
+   product_id: int
+   quantity: int
+   id: int
+}
+class categories {
+   alias: varchar(64)
+   enabled: bit(1)
+   image: varchar(128)
+   name: varchar(128)
+   parent_id: int
+   all_parent_ids: varchar(256)
+   id: int
+}
+class countries {
+   name: varchar(45)
+   code: varchar(5)
+   id: int
+}
+class currencies {
+   name: varchar(64)
+   symbol: varchar(3)
+   code: varchar(4)
+   id: int
+}
+class customers {
+   email: varchar(45)
+   password: varchar(64)
+   first_name: varchar(45)
+   last_name: varchar(45)
+   phone_number: varchar(15)
+   address_line_1: varchar(64)
+   address_line_2: varchar(64)
+   city: varchar(45)
+   state: varchar(45)
+   country_id: int
+   postal_code: varchar(10)
+   created_time: datetime(6)
+   enabled: bit(1)
+   verification_code: varchar(64)
+   authentication_type: varchar(10)
+   reset_password_token: varchar(30)
+   id: int
+}
+class order_details {
+   order_id: int
+   product_id: int
+   quantity: int
+   unit_price: float
+   subtotal: float
+   product_cost: float
+   shipping_cost: float
+   id: int
+}
+class order_track {
+   order_id: int
+   status: varchar(45)
+   updated_time: datetime(6)
+   notes: varchar(256)
+   id: int
+}
+class orders {
+   customer_id: int
+   order_time: datetime(6)
+   payment_method: varchar(255)
+   product_cost: float
+   shipping_cost: float
+   subtotal: float
+   tax: float
+   total: float
+   status: varchar(255)
+   first_name: varchar(45)
+   last_name: varchar(45)
+   phone_number: varchar(15)
+   address_line_1: varchar(64)
+   address_line_2: varchar(64)
+   city: varchar(45)
+   state: varchar(45)
+   postal_code: varchar(10)
+   country: varchar(45)
+   deliver_days: int
+   deliver_date: datetime(6)
+   id: int
+}
+class product_details {
+   name: varchar(255)
+   value: varchar(255)
+   product_id: int
+   id: int
+}
+class product_images {
+   name: varchar(255)
+   product_id: int
+   id: int
+}
+class products {
+   name: varchar(256)
+   alias: varchar(256)
+   short_description: varchar(1024)
+   full_description: varchar(8192)
+   main_image: varchar(255)
+   created_time: datetime(6)
+   updated_time: datetime(6)
+   enabled: bit(1)
+   in_stock: bit(1)
+   cost: float
+   price: float
+   discount_percent: float
+   length: float
+   width: float
+   height: float
+   weight: float
+   brand_id: int
+   category_id: int
+   average_rating: float
+   review_count: int
+   id: int
+}
+class review_votes {
+   votes: int
+   customer_id: int
+   review_id: int
+   id: int
+}
+class reviews {
+   comment: varchar(300)
+   headline: varchar(128)
+   rating: int
+   review_time: datetime(6)
+   customer_id: int
+   product_id: int
+   votes: int
+   id: int
+}
+class roles {
+   description: varchar(150)
+   name: varchar(40)
+   id: int
+}
+class settings {
+   value: varchar(1024)
+   category: varchar(45)
+   key: varchar(128)
+}
+class shipping_rates {
+   country_id: int
+   state: varchar(45)
+   rate: float
+   days: int
+   cod_supported: bit(1)
+   id: int
+}
+class states {
+   name: varchar(45)
+   country_id: int
+   id: int
+}
+class users {
+   email: varchar(128)
+   enabled: bit(1)
+   first_name: varchar(45)
+   last_name: varchar(45)
+   password: varchar(64)
+   photos: varchar(64)
+   id: int
+}
+class users_roles {
+   user_id: int
+   role_id: int
+}
+
+addresses          -[#595959,plain]-^  countries         : "country_id:id"
+addresses          -[#595959,plain]-^  customers         : "customer_id:id"
+brands_categories  -[#595959,plain]-^  brands            : "brand_id:id"
+brands_categories  -[#595959,plain]-^  categories        : "category_id:id"
+cart_items         -[#595959,plain]-^  customers         : "customer_id:id"
+cart_items         -[#595959,plain]-^  products          : "product_id:id"
+categories         -[#595959,plain]-^  categories        : "parent_id:id"
+customers          -[#595959,plain]-^  countries         : "country_id:id"
+order_details      -[#595959,plain]-^  orders            : "order_id:id"
+order_details      -[#595959,plain]-^  products          : "product_id:id"
+order_track        -[#595959,plain]-^  orders            : "order_id:id"
+orders             -[#595959,plain]-^  customers         : "customer_id:id"
+product_details    -[#595959,plain]-^  products          : "product_id:id"
+product_images     -[#595959,plain]-^  products          : "product_id:id"
+products           -[#595959,plain]-^  brands            : "brand_id:id"
+products           -[#595959,plain]-^  categories        : "category_id:id"
+review_votes       -[#595959,plain]-^  customers         : "customer_id:id"
+review_votes       -[#595959,plain]-^  reviews           : "review_id:id"
+reviews            -[#595959,plain]-^  customers         : "customer_id:id"
+reviews            -[#595959,plain]-^  products          : "product_id:id"
+shipping_rates     -[#595959,plain]-^  countries         : "country_id:id"
+states             -[#595959,plain]-^  countries         : "country_id:id"
+users_roles        -[#595959,plain]-^  roles             : "role_id:id"
+users_roles        -[#595959,plain]-^  users             : "user_id:id"
+@enduml

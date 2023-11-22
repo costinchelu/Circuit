@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minim-scale=1.0"/>
+  <title>Autentificare - Modul administrativ</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+</head>
+<body>
+<div class="container-fluid text-center">
+  <br>
+  <div>
+    <img th:src="@{/images/shop_500px.png}" alt="Missing image" class="img-fluid" >
+  </div>
+  <br>
+  <form th:action="@{/login}" method="post" style="max-width: 350px; margin: 0 auto" >
+
+    <div th:if="${param.error}" >
+      <p class="text-danger" >[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
+    </div>
+    <div th:if="${param.logout}" >
+      <p class="text-warning" >Ai fost delogat cu succes.</p>
+    </div>
+    <div class="border border-secondary rounded p-3" >
+      <p>Acces în modulul de administrație al aplicației</p>
+      <p>
+        <input type="email" name="email" class="form-control" placeholder="E-mail" required >
+      </p>
+      <p>
+        <input type="password" name="password" class="form-control" placeholder="Parolă" required >
+      </p>
+      <p>
+        <input type="checkbox" name="remember-me" />&nbsp; Păstrează-mă autentificat
+      </p>
+      <p>
+        <input type="submit" value="Login" class="btn btn-primary" >
+      </p>
+    </div>
+  </form>
+
+</div>
+
+<div th:replace="fragments :: footer" ></div>
+
+</body>
+</html>

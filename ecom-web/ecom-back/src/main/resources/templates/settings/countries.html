@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="content" th:remove="tag">
+    <div>
+        <p>
+            Gestionarea listei de țări disponibile clienților.
+            Apăsați pentru încărcarea listei.
+        </p>
+    </div>
+    <div>
+        <input type="button" value="Încarcă lista țărilor" id="buttonLoadCountries" class="btn btn-primary m-2" />
+    </div>
+    <div>
+        <select class="form-control m-2" style="height: 300px" size="3" id="dropDownCountries">
+        </select>
+    </div>
+    <form id="formCountry">
+    <div class="form-group row ml-2">
+        <label class="col-form-label mt-2" id="labelCountryName">Numele țării:</label>
+        <div class="col-md">
+            <input type="text" class="form-control mt-2" id="fieldCountryName" required minlength="3" maxlength="45" />
+        </div>
+        <label class="col-form-label mt-2">Cod țară:</label>
+        <div class="col-md">
+            <input type="text" class="form-control mt-2" id="fieldCountryCode" required minlength="2" maxlength="4" />
+        </div>
+        <div class="col-lg-4 mt-2">
+            <input type="button" id="buttonAddCountry" value="Nou" class="btn btn-success mr-2" />
+            <input type="button" id="buttonUpdateCountry" value="Actualizare" class="btn btn-primary mr-2" disabled="disabled" />
+            <input type="button" id="buttonDeleteCountry" value="Ștergere" class="btn btn-danger" disabled="disabled" />
+        </div>
+    </div>
+    </form>
+</div>
+</body>
+</html>

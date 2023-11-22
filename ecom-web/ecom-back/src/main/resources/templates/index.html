@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head th:replace="fragments :: page_header('Modul administrare - aplicație web', 'none')"></head>
+
+<body>
+<div class="container-fluid">
+
+    <div th:replace="navigation :: menuBar"></div>
+
+    <div>
+        <h2>Modul de gestiune al magazinului online</h2>
+    </div>
+    Bine ai venit
+    <a th:href="@{/account}"
+       sec:authentication="principal.fullName" ></a>
+    <span sec:authentication="principal.authorities" ></span>
+</div>
+
+<!--<div th:replace="fragments :: footer" ></div>-->
+
+</body>
+</html>

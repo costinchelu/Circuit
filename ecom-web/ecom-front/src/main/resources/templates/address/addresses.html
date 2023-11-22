@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: page_header('Adresele mele', 'none')"></head>
+<body>
+<div class="container-fluid"
+     th:with="redirectedFromCheckoutPage = ${param.redirect != null && param.redirect[0] == 'checkout'}">
+
+  <div th:replace="navigation :: header_menu"></div>
+
+  <div th:replace="navigation :: search_nav"></div>
+
+  <div class="text-center">
+    <div><h2 th:text="${redirectedFromCheckoutPage} ? 'Alege adresa de livrare' : 'Adresele tale'"></h2></div>
+    <div>
+      <br>
+      <a th:unless="${param.redirect}" th:href="@{/address_book/new}" class="h4">Adaugă o nouă adresă</a>
+      <br>
+      <a th:if="${redirectedFromCheckoutPage}" th:href="@{/address_book/new(redirect=checkout)}" class="h4">Adaugă o nouă adresă</a>
+    </div>
+  </div>
+
+  <div th:if="${message != null}" class="alert alert-success text-center m-1">
+    [[${message}]]
+  </div>
+
+  <div class="row m-1">
+    <div class="col-sm-6 mt-2">
+      <div class="card" th:classappend="${usePrimaryAddressAsDefault ? 'bg-warning' : ''}">
+        <div class="card-header">
+          <div class="row">
+            <div class="col">
+              <b>Adresa principală</b>
+
+              <th:block th:if="${usePrimaryAddressAsDefault}">
+                <span class="text-danger" th:text="${redirectedFromCheckoutPage ? '[Selectată]' : '[Implicită]'}"></span>
+              </th:block>
+
+              <th:block th:unless="${usePrimaryAddressAsDefault}">
+                <a th:unless="${param.redirect}" th:href="@{'/address_book/default/0'}">[Setează ca implicită]</a>
+                <a th:if="${param.redirect != null && param.redirect[0] == 'cart'}" th:href="@{'/address_book/default/0?redirect=cart'}">[Setează ca implicită]</a>
+                <a th:if="${redirectedFromCheckoutPage}" th:href="@{'/address_book/default/0?redirect=checkout'}">[Alege]</a>
+              </th:block>
+            </div>
+            <div class="col">
+              <div class="float-right">
+                <a th:unless="${param.redirect}" class="fas fa-edit icon-dark" title="Editează adresa implicită"
+                   th:href="@{/account_details(redirect=address_book)}"></a>
+
+                <a th:if="${redirectedFromCheckoutPage}" class="fas fa-edit icon-dark" title="Editează adresa implicită"
+                   th:href="@{/account_details(redirect=checkout)}"></a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          [[${customer}]]
+        </div>
+      </div>
+    </div>
+
+    <th:block th:each="address, status: ${listAddresses}">
+      <div class="col-sm-6 mt-2">
+        <div class="card" th:classappend="${address.defaultForShipping ? 'bg-warning' : ''}">
+          <div class="card-header">
+            <div class="row">
+              <div class="col">
+                <b>Address #[[${status.count + 1}]]</b>
+
+                <th:block th:if="${address.defaultForShipping}">
+                  <span class="text-danger" th:text="${redirectedFromCheckoutPage ? '[Selectată]' : '[Implicită]'}"></span>
+                </th:block>
+
+                <th:block th:unless="${address.defaultForShipping}">
+                  <a th:unless="${param.redirect}" th:href="@{'/address_book/default/' + ${address.id}}">[Setează ca implicită]</a>
+                  <a th:if="${param.redirect != null && param.redirect[0] == 'cart'}" th:href="@{'/address_book/default/' + ${address.id} + '?redirect=cart'}">[Setează ca implicită]</a>
+                  <a th:if="${redirectedFromCheckoutPage}" th:href="@{'/address_book/default/' + ${address.id} + '?redirect=checkout'}">[Alege]</a>
+                </th:block>
+
+              </div>
+              <div class="col">
+                <div class="float-right">
+                  <a th:unless="${param.redirect}" class="fas fa-edit icon-dark" title="Editează adresa"
+                     th:href="@{'/address_book/edit/' + ${address.id}}"></a>
+
+                  <a th:if="${redirectedFromCheckoutPage}" class="fas fa-edit icon-dark" title="Editează adresa"
+                     th:href="@{'/address_book/edit/' + ${address.id} + '?redirect=checkout'}"></a>
+
+                  &nbsp;
+                  <a class="fas fa-trash icon-dark linkDelete" title="Șterge adresa"
+                     th:entityId="${address.id}"
+                     th:href="@{'/address_book/delete/' + ${address.id}}"></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            [[${address}]]
+          </div>
+        </div>
+      </div>
+    </th:block>
+  </div>
+  <div>&nbsp;</div>
+
+  <div th:replace="fragments :: confirm_modal"></div>
+
+  <div th:replace="navigation :: footer_menu"></div>
+</div>
+<script type="text/javascript">
+
+  $(document).ready(function() {
+    $(".linkDelete").on("click", function(evt) {
+      evt.preventDefault();
+      showDeleteConfirmModal($(this), 'adresa');
+    });
+  });
+
+  function showDeleteConfirmModal(link, entityName) {
+    entityId = link.attr("entityId");
+    $("#yesButton").attr("href", link.attr("href"));
+    $("#confirmText").text("Ești sigur că vrei să ștergi " + entityName + "?");
+    $("#confirmModal").modal();
+  }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+### MYSQL container ###
+
+optional volume:
+docker volume create v1mysql
+
+docker container run --name mysql1 -d -p 3307:3306 --expose 3307 -e MYSQL_ROOT_PASSWORD=mysql123 -v v1mysql:/var/lib/mysql mysql
+
+or (always started)
+docker container run --name mysql1 -d -p 3307:3306 --expose 3307 -e MYSQL_ROOT_PASSWORD=mysql123 --restart unless-stopped -v v1mysql:/var/lib/mysql mysql
+
+
+
+
+		>> Backup of the Docker container DB (Getting the dump file from a docker container):
+		
+			1. access command line of the container:
+		docker container exec -it mysql1 bash
+		
+			2. from the / location use mysqldump (in this example testdb is the database to backup)
+		/usr/bin/mysqldump -u root --password=mysql123 testdb > dbdump.sql
+		
+			3. dump file will be created in the / folder
+		
+			4. Use another powershell to copy from the container to the host:
+			docker cp mysql1:/dbdump.sql C:\DB_Backup
+
+
+
+
+### MailHog (mail interceptor) container ###
+
+docker run -itd --name mail -p 1025:1025 -p 8025:8025 mailhog/mailhog

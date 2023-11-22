@@ -1,0 +1,110 @@
+<div class="modal-header">
+    <h4 class="modal-title">Detalii client</h4>
+    <button type="button" class="close" data-dismiss="modal">&times;</button>
+</div>
+
+<div>
+
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="general-tab" data-toggle="tab" href="#general" role="tab" aria-controls="general" aria-selected="true">Generale</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="address-tab" data-toggle="tab" href="#address" role="tab" aria-controls="address" aria-selected="false">Addresă</a>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active p-3" id="general" role="tabpanel" aria-labelledby="general-tab">
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">ID client:</label>
+                <div class="col-sm-8">
+                    <input type="text" readonly class="form-control" th:value="${customer.id}" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Nume:</label>
+                <div class="col-sm-8">
+                    <input type="text" readonly class="form-control" th:value="${customer.fullName}" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">E-mail:</label>
+                <div class="col-sm-8">
+                    <input type="text" readonly class="form-control" th:value="${customer.email}" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Telefon:</label>
+                <div class="col-sm-8">
+                    <input type="text" readonly class="form-control" th:value="${customer.phoneNumber}" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Activat:</label>
+                <div class="col-sm-8">
+                    <input type="checkbox" th:checked="${customer.enabled}" disabled="disabled" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Data și ora înregistrării:</label>
+                <div class="col-sm-8">
+                    <span th:text="${#dates.format(customer.createdTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade show p-3" id="address" role="tabpanel" aria-labelledby="address-tab">
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Adresă (rând 1):</label>
+                <div class="col-sm-8">
+                    <input type="text" readonly class="form-control" th:value="${customer.addressLine1}" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Adresă (rând 2):</label>
+                <div class="col-sm-8">
+                    <input type="text" readonly class="form-control" th:value="${customer.addressLine2}" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Oraș:</label>
+                <div class="col-sm-8">
+                    <input type="text" readonly class="form-control" th:value="${customer.city}" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Regiune:</label>
+                <div class="col-sm-8">
+                    <input type="text" readonly class="form-control" th:value="${customer.state}" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Țară:</label>
+                <div class="col-sm-8">
+                    <input type="text" readonly class="form-control" th:value="${customer.country.name}" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Cod poștal:</label>
+                <div class="col-sm-8">
+                    <input type="text" readonly class="form-control" th:value="${customer.postalCode}" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-danger" data-dismiss="modal">Închide</button>
+</div>

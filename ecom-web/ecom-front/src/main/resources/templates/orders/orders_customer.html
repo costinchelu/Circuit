@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: page_header('Comenzile mele', 'none')"></head>
+<body>
+<div class="container-fluid">
+
+    <div th:replace="navigation :: header_menu"></div>
+
+    <div th:replace="navigation :: search_nav"></div>
+
+    <div>
+        <h2>Comenzile mele</h2>
+    </div>
+
+    <div th:replace="fragments :: search_form"></div>
+
+    <div class="full-details">
+        <table class="table table-bordered table-striped table-hover table-responsive-xl">
+            <thead class="thead-dark">
+            <tr>
+                <th th:replace="fragments :: column_link('id', 'ID', 'none')"></th>
+                <th th:replace="fragments :: column_link('orderTime', 'Data comenzii', 'none')"></th>
+                <th>Produse</th>
+                <th th:replace="fragments :: column_link('subtotal', 'Subtotal', 'none')"></th>
+                <th th:replace="fragments :: column_link('total', 'Total', 'none')"></th>
+                <th th:replace="fragments :: column_link('status', 'Stare', 'none')"></th>
+                <th>Factură</th>
+                <th>Detalii</th>
+                <th>Retur</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="order : ${listOrders}">
+                <td th:text="${order.id}">ID</td>
+                <td><div th:replace="fragments :: format_time(${order.orderTime})">Data comenzii</div></td>
+                <td th:utext="${order.productNames}"></td>
+                <td>
+                    <div th:replace="fragments :: format_currency(${order.subtotal})">Subtotal</div>
+                </td>
+                <td>
+                    <div th:replace="fragments :: format_currency(${order.total})">Total</div>
+                </td>
+                <td><span th:class="'textOrderStatus' + ${order.id}">[[${order.status}]]</span></td>
+                <td>
+                    <th:block th:if="${order.delivered == true && order.returned == false}">
+                        <a th:href="@{'/orders/export/pdf/' + ${order.id}}"
+                           class="fas fa-file-invoice fa-2x icon-green"
+                           role="button" ></a>
+                    </th:block>
+                </td>
+                <td>
+                    <a class="fas fa-file-alt fa-2x icon-dodger-blue linkDetail"
+                       th:href="@{'/orders/detail/' + ${order.id}}"
+                       title="Vizualizează detalii despre comandă"></a>
+                </td>
+                <td>
+                    <th:block th:if="${order.returnRequested == false && order.delivered == true && order.returned == false && order.deliveredPlusOneMonth() > #dates.createToday()}">
+                        <a class="fas fa-undo fa-2x icon-dark linkReturnOrder"
+                           href=""
+                           th:classappend="'linkReturn' + ${order.id}"
+                           th:orderId="${order.id}"
+                           title="Retur comandă"></a>
+                    </th:block>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="less-details p-2">
+        <th:block th:each="order : ${listOrders}">
+            <div class="row m-1">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col">
+                                <span>ID comandă #[[${order.id}]]</span>
+                            </div>
+                            <div class="col">
+                                <div class="float-right">
+                                    <a class="fas fa-file-alt fa-2x icon-green linkDetail"
+                                       th:href="@{'/orders/detail/' + ${order.id}}"></a>
+
+                                    <th:block th:if="${order.returnRequested == false && order.delivered == true && order.returned == false}">
+<!--                                        TODO check for orderTime to be within a month before now-->
+                                        &nbsp;
+                                        <a class="fas fa-undo fa-2x icon-dark linkReturnOrder"
+                                           href=""
+                                           th:classappend="'linkReturn' + ${order.id}"
+                                           th:orderId="${order.id}"
+                                           title="Retur comandă">
+                                        </a>
+                                    </th:block>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div>
+                            <span th:utext="${order.productNames}"></span>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div th:replace="fragments :: format_currency(${order.total})">Total</div>
+                            </div>
+                            <div class="col">
+                                <span th:class="'textOrderStatus' + ${order.id}">[[${order.status}]]</span>
+                            </div>
+                        </div>
+                        <div><small><div th:replace="fragments :: format_time(${order.orderTime})"></div></small></div>
+                    </div>
+                </div>
+            </div>
+        </th:block>
+    </div>
+
+    <div th:replace="fragments :: pagination('/orders', 'comandă')"></div>
+
+    <div th:replace="orders/return_order_modal :: content"></div>
+
+    <div class="modal fade" id="orderDetailsModal">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+
+    <div>&nbsp;</div>
+    <div th:replace="navigation :: footer_menu"></div>
+
+</div>
+<script th:src="@{/js/commonList.js}"></script>
+<script type="text/javascript">
+
+    moduleURL = "[[@{/orders}]]";
+    contextPath = "[[@{/}]]";
+    var csrfHeaderName = "[[${_csrf.headerName}]]";
+    var csrfValue = "[[${_csrf.token}]]";
+
+    $(document).ready(function(){
+        handleDetailLink(".linkDetail", "#orderDetailsModal");
+    });
+
+</script>
+<script type="text/javascript" th:src="@{/js/returnOrder.js}"></script>
+</body>
+</html>
